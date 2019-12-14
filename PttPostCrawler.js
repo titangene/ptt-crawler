@@ -25,6 +25,7 @@ class PttPostCrawler extends PttCrawler {
       let titlePath = titleEle.find("a").attr("href");
       let postUrl = this.getFullUrl(titlePath);
       let titleText = titleEle.text();
+      if (!titleText.match(/[\[［]]/)) return;
       let type = "";
       let title = titleText
         .split("/")
@@ -41,16 +42,12 @@ class PttPostCrawler extends PttCrawler {
         type = null;
       }
 
-      console.log(
-        titleEle
-          .text()
-          .replace(/^\s+\[.+\]/)
-          .replace(/\s+$/)
-      );
-
       let date = postUrl.match(/\d{10,}/);
       posts.push({
-        title: titleEle.text(),
+        title: titleEle
+          .text()
+          .replace(/^\s+[\[［].+[\]］]/, "")
+          .replace(/\s+$/, ""),
         url: postUrl,
         date: moment.unix(Number(date[0])).format("YYYY-MM-DD"),
         type,
