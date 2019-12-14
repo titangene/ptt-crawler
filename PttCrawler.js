@@ -9,6 +9,7 @@ class PttCrawler {
 
   async loadHTMLFromURL() {
     const response = await axios.get(this.url);
+    console.log(response.status);
     return response.data; //html resource code
   }
 

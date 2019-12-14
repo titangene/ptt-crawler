@@ -60,7 +60,7 @@ class PttPostCrawler extends PttCrawler {
         url: postUrl,
         date: moment.unix(Number(date[0])).format("YYYY-MM-DD"),
         type,
-        county: title[1]
+        county: titleArr[1]
       });
     });
 
