@@ -1,10 +1,10 @@
-const PttCrawler = require("./PttCrawler.js");
+const PttPostCrawler = require("./PttPostCrawler.js");
 
 let baseUrl = "https://www.ptt.cc";
 let pttMobilesalesUrl = `${baseUrl}/bbs/mobilesales/index.html`;
 
 async function pttMobilesalesCrawling() {
-  const crawler = new PttCrawler(pttMobilesalesUrl);
+  const crawler = new PttPostCrawler(pttMobilesalesUrl);
   await crawler.loadHtmlData();
   console.log("run");
   console.log(crawler.getPost());

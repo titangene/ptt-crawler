@@ -20,27 +20,6 @@ class PttCrawler {
   getFullUrl(urlPath) {
     return `https://www.ptt.cc${urlPath}`;
   }
-
-  getPost() {
-    let posts = [];
-    this.$(".r-ent").each((index, element) => {
-      let date = this.$(element)
-        .find(".meta .date")
-        .text()
-        .split("/");
-      console.log(date);
-      //取得看板文章標題及 url
-      let titleEle = this.$(element).find(".title a");
-      let titlePath = titleEle.attr("href");
-      posts.push({
-        title: titleEle.text(),
-        url: this.getFullUrl(titlePath),
-        month: date[0],
-        date: date[1]
-      });
-    });
-    return posts;
-  }
 }
 
 module.exports = PttCrawler;
