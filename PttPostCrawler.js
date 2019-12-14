@@ -40,11 +40,12 @@ class PttPostCrawler extends PttCrawler {
         if (!index) return (titleArr = item.split("/").map(w => w));
         return titleArr.push(item);
       });
-      titleArr = titleArr.filter((x, index) => {
+      titleArr = titleArr.filter((x, index, ary) => {
         if (index === 3) x = x.replace(/^\s+/, "");
         return Boolean(x);
       });
 
+      
       if (titleArr[0] === "徵") {
         type = "buy";
       } else if (titleArr[0] === "賣") {
@@ -52,9 +53,13 @@ class PttPostCrawler extends PttCrawler {
       } else {
         type = null;
       }
-
+      
       let date = postUrl.match(/\d{10,}/);
       if (!type || titleArr.length < 2 || !titleArr[3]) return;
+
+      
+      titleArr[3] = titleArr[3].replace(/^\s+/, '');
+
       posts.push({
         title: titleArr[3],
         url: postUrl,
