@@ -10,12 +10,12 @@ async function pttMobilesalesCrawling() {
   const crawler = new PttPostCrawler(pttMobilesalesUrl);
   await crawler.loadHtmlData();
   const posts = await crawler.getPost();
-  console.log(posts);
+  // console.log(posts);
   saveToJson(posts);
 }
 
 pttMobilesalesCrawling();
 
 function saveToJson(data) {
-  fs.writeFileSync("db.json", JSON.stringify(data, null, '  '));
+  fs.writeFileSync("db.json", JSON.stringify(data, null, "  "));
 }

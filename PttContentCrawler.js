@@ -11,7 +11,26 @@ class PttContentCrawler extends PttCrawler {
   }
 
   getContent() {
-    return this.$('#main-content').contents()[4].data;
+    return this.sliceContent(this.$("#main-content").contents()[4].data);
+  }
+
+  sliceContent(content) {
+    let assign = "：";
+    let result = content
+      .split("：")
+      .join("\n")
+      .split(/\r?\n/)
+      .filter(item => item !== "")
+      .map(item => {
+        return item.replace(/ /g, "");
+      });
+
+    console.log(result);
+    return result;
+    // return {
+    //   name: result[1],
+    //   buy_moment: result[1]
+    // };
   }
 }
 
