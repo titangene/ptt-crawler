@@ -25,27 +25,27 @@ class PttPostCrawler extends PttCrawler {
       let titlePath = titleEle.find("a").attr("href");
       let postUrl = this.getFullUrl(titlePath);
       let titleText = titleEle.text();
-      if (titleText.length < 6) return;
-      let type = "";
       let title = titleText
         .replace("［", "[")
         .replace("］", "]")
         .replace(/^\s+\[/, "")
         .replace(/\s+$/, "")
         .split("]")
-        .filter(x => Boolean(x) && !x.includes("//"));
+        .filter(x => Boolean(x));
+      if (title[0].includes("//") || title.length < 2) return;
+      //刪除雙斜線錯誤格式
 
       let titleArr = [];
       title.forEach((item, index, arr) => {
         if (!index) return (titleArr = item.split("/").map(w => w));
         return titleArr.push(item);
       });
-      titleArr = titleArr.filter((x, index, ary) => {
+      titleArr = titleArr.filter((x, index) => {
         if (index === 3) x = x.replace(/^\s+/, "");
         return Boolean(x);
       });
 
-      
+      let type = "";
       if (titleArr[0] === "徵") {
         type = "buy";
       } else if (titleArr[0] === "賣") {
@@ -53,12 +53,11 @@ class PttPostCrawler extends PttCrawler {
       } else {
         type = null;
       }
-      
-      let date = postUrl.match(/\d{10,}/);
-      if (!type || titleArr.length < 2 || !titleArr[3]) return;
 
-      
-      titleArr[3] = titleArr[3].replace(/^\s+/, '');
+      let date = postUrl.match(/\d{10,}/);
+      if (!type || !titleArr[3]) return;
+
+      titleArr[3] = titleArr[3].replace(/^\s+/, "");
 
       posts.push({
         title: titleArr[3],
