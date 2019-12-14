@@ -28,21 +28,22 @@ class PttPostCrawler extends PttCrawler {
       if (titleText.length < 6) return;
       let type = "";
       let title = titleText
+        .replace("［", "[")
+        .replace("］", "]")
         .replace(/^\s+\[/, "")
         .replace(/\s+$/, "")
         .split("]")
-        .filter(x => Boolean(x));
+        .filter(x => Boolean(x) && !x.includes("//"));
+
       let titleArr = [];
       title.forEach((item, index, arr) => {
-        if (!index)
-          return (titleArr = item
-            .split("/")
-            .join("］")
-            .split("］")
-            .map(w => w));
+        if (!index) return (titleArr = item.split("/").map(w => w));
         return titleArr.push(item);
       });
-      titleArr = titleArr.filter(x => Boolean(x));
+      titleArr = titleArr.filter((x, index) => {
+        if (index === 3) x = x.replace(/^\s+/, "");
+        return Boolean(x);
+      });
 
       if (titleArr[0] === "徵") {
         type = "buy";
@@ -53,8 +54,7 @@ class PttPostCrawler extends PttCrawler {
       }
 
       let date = postUrl.match(/\d{10,}/);
-      //if (!title[1]) return;
-      if (!type || title.length < 2) return;
+      if (!type || titleArr.length < 2 || !titleArr[3]) return;
       posts.push({
         title: titleArr[3],
         url: postUrl,

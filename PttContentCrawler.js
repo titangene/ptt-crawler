@@ -19,6 +19,7 @@ class PttContentCrawler extends PttCrawler {
   }
 
   sliceContent(content) {
+    console.log(this.url);
     if (!content) return;
     let price = "";
     let data = content
