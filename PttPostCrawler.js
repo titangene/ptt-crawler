@@ -1,5 +1,6 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
+const moment = require("moment");
 const fs = require("fs");
 
 const PttCrawler = require("./PttCrawler.js");
@@ -15,11 +16,6 @@ class PttPostCrawler extends PttCrawler {
     let posts = [];
 
     this.$(".r-ent").each((index, element) => {
-      let date = this.$(element)
-        .find(".meta .date")
-        .text()
-        .split("/");
-
       //取得看板文章標題及 url
       let titleEle = this.$(element).find(".title a");
       let titlePath = titleEle.attr("href");
@@ -40,12 +36,11 @@ class PttPostCrawler extends PttCrawler {
       } else {
         type = null;
       }
-
+      let date = postUrl.match(/\d{10,}/);
       posts.push({
         title: titleEle.text(),
         url: postUrl,
-        month: date[0],
-        date: date[1],
+        date: moment.unix(Number(date[0])).format("YYYY-MM-DD"),
         type,
         county: title[1]
       });
