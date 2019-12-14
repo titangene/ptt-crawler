@@ -33,14 +33,18 @@ class PttContentCrawler extends PttCrawler {
         // .join("\n")
         // .split(/\r?\n/) //換行
       );
-    data.filter(item => {
-      item[0] = item[0].replace(/ /g, ""); //空白
-      if (item[0].includes("欲售價格")) {
-        return (price = item[1].match(/\d{4,}/));
-      } else if (item[0].includes("欲徵價格")) {
-        return (price = item[1].match(/\d{4,}/));
-      }
-    });
+    data
+      .filter(item => {
+        return item.length > 1;
+      })
+      .filter(item => {
+        item[0] = item[0].replace(/ /g, ""); //空白
+        if (item[0].includes("欲售價格")) {
+          return (price = item[1].match(/\d{4,}/));
+        } else if (item[0].includes("欲徵價格")) {
+          return (price = item[1].match(/\d{4,}/));
+        }
+      });
 
     if (!price) {
       return 0;

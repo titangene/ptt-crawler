@@ -25,29 +25,38 @@ class PttPostCrawler extends PttCrawler {
       let titlePath = titleEle.find("a").attr("href");
       let postUrl = this.getFullUrl(titlePath);
       let titleText = titleEle.text();
-      if (!titleText.match(/[\[［]]/)) return;
+      if (titleText.length < 6) return;
       let type = "";
       let title = titleText
-        .split("/")
-        .join("[")
-        .split("[")
-        .join("]")
+        .replace(/^\s+\[/, "")
+        .replace(/\s+$/, "")
         .split("]")
         .filter(x => Boolean(x));
-      if (title[0] === "徵") {
+      let titleArr = [];
+      title.forEach((item, index, arr) => {
+        if (!index)
+          return (titleArr = item
+            .split("/")
+            .join("］")
+            .split("］")
+            .map(w => w));
+        return titleArr.push(item);
+      });
+      titleArr = titleArr.filter(x => Boolean(x));
+
+      if (titleArr[0] === "徵") {
         type = "buy";
-      } else if (title[0] === "賣") {
+      } else if (titleArr[0] === "賣") {
         type = "sell";
       } else {
         type = null;
       }
 
       let date = postUrl.match(/\d{10,}/);
+      //if (!title[1]) return;
+      if (!type || title.length < 2) return;
       posts.push({
-        title: titleEle
-          .text()
-          .replace(/^\s+[\[［].+[\]］]/, "")
-          .replace(/\s+$/, ""),
+        title: titleArr[3],
         url: postUrl,
         date: moment.unix(Number(date[0])).format("YYYY-MM-DD"),
         type,

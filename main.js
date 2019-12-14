@@ -4,7 +4,7 @@ const PttPostCrawler = require("./PttPostCrawler.js");
 const PttContentCrawler = require("./PttContentCrawler.js");
 
 let baseUrl = "https://www.ptt.cc";
-let pttMobilesalesUrl = `${baseUrl}/bbs/mobilesales/index19221.html`;
+let pttMobilesalesUrl = `${baseUrl}/bbs/mobilesales/index.html`;
 
 let posts = [];
 let untilNextPage = true;
@@ -23,7 +23,6 @@ async function pttMobilesalesCrawling(url) {
 }
 
 pttMobilesalesCrawling(pttMobilesalesUrl).then(() => {
-  //console.log(posts);
   saveToJson(posts);
 });
 
