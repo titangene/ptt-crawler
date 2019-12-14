@@ -69,7 +69,6 @@ class PttPostCrawler extends PttCrawler {
     });
 
     let postUrls = posts.map(post => post.url);
-
     let postContentTasks = postUrls.map(async url => {
       const crawler = new PttContentCrawler(url);
       await crawler.loadHtmlData();

@@ -4,18 +4,24 @@ const PttPostCrawler = require("./PttPostCrawler.js");
 const PttContentCrawler = require("./PttContentCrawler.js");
 
 let baseUrl = "https://www.ptt.cc";
-let pttMobilesalesUrl = `${baseUrl}/bbs/mobilesales/index19272.html`;
+let pttMobilesalesUrl = `${baseUrl}/bbs/mobilesales/index.html`;
 
 let posts = [];
 let untilNextPage = true;
 
-let testUrl = "https://www.ptt.cc/bbs/mobilesales/index19271.html";
+const sleep = t =>
+  new Promise(resolve => {
+    setTimeout(resolve, t);
+  });
+
+// let testUrl = "https://www.ptt.cc/bbs/mobilesales/index19271.html";
 async function pttMobilesalesCrawling(url) {
-  console.log(url);
-  if (url === testUrl) return;
+  // console.log(url);
+  // if (url === testUrl) return;
   const crawler = new PttPostCrawler(url);
   await crawler.loadHtmlData();
   untilNextPage = crawler.isFirstPostCurrentMonth();
+  await sleep(Math.floor(Math.random() * 5000));
   if (!untilNextPage) return;
 
   posts.push(...(await crawler.getPost()));
