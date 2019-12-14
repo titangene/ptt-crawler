@@ -4,7 +4,7 @@ const PttPostCrawler = require("./PttPostCrawler.js");
 const PttContentCrawler = require("./PttContentCrawler.js");
 
 let baseUrl = "https://www.ptt.cc";
-let pttMobilesalesUrl = `${baseUrl}/bbs/mobilesales/index.html`;
+let pttMobilesalesUrl = `${baseUrl}/bbs/mobilesales/index19268.html`;
 
 async function pttMobilesalesCrawling() {
   const crawler = new PttPostCrawler(pttMobilesalesUrl);
