@@ -62,6 +62,17 @@ class PttPostCrawler extends PttCrawler {
       })
       .filter(post => Boolean(post.price));
   }
+
+  getPrevPageUrl() {
+    let urlPath = this.$('.wide').eq(1).attr('href')
+    return this.getFullUrl(urlPath);
+  }
+
+  isFirstPostCurrentMonth() {
+    let firstPostDate = this.$('.r-ent .title a').eq(0).attr('href').match(/\d{10}/)[0];
+    let month = moment.unix(Number(firstPostDate)).format('MM');
+    return month == moment().format('MM');
+  }
 }
 
 module.exports = PttPostCrawler;
