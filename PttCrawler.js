@@ -17,6 +17,10 @@ class PttCrawler {
     this.$ = cheerio.load(responseHtml);
   }
 
+  getFullUrl(urlPath) {
+    return `https://www.ptt.cc${urlPath}`;
+  }
+
   getPost() {
     let posts = [];
     this.$('.r-ent').each((index, element) => {
@@ -24,7 +28,7 @@ class PttCrawler {
       let titlePath = titleEle.attr('href');
       posts.push({
         title: titleEle.text(),
-        url: baseUrl + titlePath
+        url: this.getFullUrl(titlePath)
       });
     });
     return posts;
