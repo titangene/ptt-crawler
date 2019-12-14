@@ -6,7 +6,6 @@ const PttContentCrawler = require("./PttContentCrawler.js");
 let baseUrl = "https://www.ptt.cc";
 let pttMobilesalesUrl = `${baseUrl}/bbs/mobilesales/index.html`;
 
-let posts = [];
 let untilNextPage = true;
 
 const sleep = t =>
@@ -24,14 +23,13 @@ async function pttMobilesalesCrawling(url) {
   await sleep(Math.floor(Math.random() * 5000));
   if (!untilNextPage) return;
 
-  posts.push(...(await crawler.getPost()));
+  saveToJson(await crawler.getPost());
   return pttMobilesalesCrawling(crawler.getPrevPageUrl());
 }
 
-pttMobilesalesCrawling(pttMobilesalesUrl).then(() => {
-  saveToJson(posts);
-});
+pttMobilesalesCrawling(pttMobilesalesUrl);
 
 function saveToJson(data) {
-  fs.writeFileSync("db.json", JSON.stringify(data, null, "  "));
+  const newData = [...JSON.parse(fs.readFileSync("db.json").toString() || "[]"), ...data];
+  fs.writeFileSync("db.json", JSON.stringify(newData, null, "  "));
 }
