@@ -19,8 +19,8 @@ class PttCrawler {
 
   getPost() {
     let posts = [];
-    this.$('.r-ent').each(function(index) {
-      let titleEle = $(this).find('.title a');
+    this.$('.r-ent').each((index, element) => {
+      let titleEle = this.$(element).find('.title a');
       let titlePath = titleEle.attr('href');
       posts.push({
         title: titleEle.text(),
