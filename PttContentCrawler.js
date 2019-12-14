@@ -15,22 +15,29 @@ class PttContentCrawler extends PttCrawler {
   }
 
   sliceContent(content) {
-    let assign = "：";
-    let result = content
-      .split("：")
-      .join("\n")
-      .split(/\r?\n/)
-      .filter(item => item !== "")
-      .map(item => {
-        return item.replace(/ /g, "");
-      });
+    let price = "";
+    let data = content
+      .split("\n")
+      .filter(x => Boolean(x))
+      .map(
+        x =>
+          x
+            .split("：")
+            .join(":")
+            .split(":")
+        // .join("\n")
+        // .split(/\r?\n/) //換行
+      );
 
-    console.log(result);
-    return result;
-    // return {
-    //   name: result[1],
-    //   buy_moment: result[1]
-    // };
+    data.filter(item => {
+      item[0] = item[0].replace(/ /g, ""); //空白
+      if (item[0].includes("欲售價格")) {
+        price = item[1];
+      } else if (item[0].includes("欲徵價格")) {
+        price = item[1];
+      }
+    });
+    return price;
   }
 }
 

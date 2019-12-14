@@ -10,7 +10,6 @@ async function pttMobilesalesCrawling() {
   const crawler = new PttPostCrawler(pttMobilesalesUrl);
   await crawler.loadHtmlData();
   const posts = await crawler.getPost();
-  // console.log(posts);
   saveToJson(posts);
 }
 
