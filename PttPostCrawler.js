@@ -11,33 +11,41 @@ class PttPostCrawler extends PttCrawler {
     this.url = url;
   }
 
-  getPost() {
+  async getPost() {
     let posts = [];
-    this.$(".r-ent").each(async (index, element) => {
+
+    this.$(".r-ent").each((index, element) => {
       let date = this.$(element)
         .find(".meta .date")
         .text()
         .split("/");
-      console.log(date);
+      
       //取得看板文章標題及 url
       let titleEle = this.$(element).find(".title a");
       let titlePath = titleEle.attr("href");
       let postUrl = this.getFullUrl(titlePath);
 
-      const pttContentCrawler = new PttContentCrawler(postUrl);
-      await pttContentCrawler.loadHtmlData();
-      let content = pttContentCrawler.getContent();
-      console.log(content);
-
       posts.push({
         title: titleEle.text(),
         url: postUrl,
         month: date[0],
-        date: date[1],
-        content: content
+        date: date[1]
       });
     });
-    return posts;
+
+    let postUrls = posts.map(post => post.url);
+
+    let postContentTasks = postUrls.map(async (url) => {
+      const crawler = new PttContentCrawler(url);
+      await crawler.loadHtmlData();
+      return crawler.getContent()
+    });
+    
+    let postContents = await Promise.all(postContentTasks);
+
+    return posts.map((post, index) => {
+      return {...post, content: postContents[index]}
+    });
   }
 }
 
